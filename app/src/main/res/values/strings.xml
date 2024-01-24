@@ -1,3 +1,69 @@
 <resources>
     <string name="app_name">LupiApp</string>
+
+    <string name="label_usuario">Correo Electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_start_session">Iniciar Sesión</string>
+    <string name="label_nuevoUser"><u>Nuevo Usuario ? Registrarme Ahora</u></string>
+    <string name="label_olvide_password">Olvide mi contraseña ?</string>
+    <string name="label_bienvenida">Hola ! - Identifíquese para iniciar sesión</string>
+    <string name="title_activity_inicio">InicioActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Alexander Fuentes Medina</string>
+    <string name="nav_header_subtitle">afuentes@live.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Cerrar Sesión</string>
+    <string name="descripcion_producto">Es un producto de prueba, estoy haciendo pruebas, ojalá si compile y pueda mimir temprano.</string>
+
+    <string name="menu_home">Inicio</string>
+    <string name="menu_gallery">Mis Compras</string>
+    <string name="menu_slideshow">Configuración</string>
+    <string name="add_shop">Añadir al Carrito</string>
+    <string name="comprar_p">Comprar</string>
+    <string-array name="tipoDoc">
+        <item>DNI</item>
+        <item>RUC</item>
+        <item>CARNET EXT.</item>
+        <item>PASAPORTE</item>
+    </string-array>
+    <string-array name="departamentos">
+        <item>Ica</item>
+        <item>Arequipa</item>
+        <item>Cusco</item>
+        <item>Lima</item>
+    </string-array>
+    <string-array name="provincias">
+        <item>Ica</item>
+        <item>Chincha</item>
+        <item>Pisco</item>
+        <item>Camaná</item>
+        <item>La unión</item>
+        <item>Caravelí</item>
+        <item>Cuzco</item>
+        <item>Urubamba</item>
+        <item>Anta</item>
+        <item>Lima Metropolitana</item>
+        <item>Lima Provincia</item>
+        <item>Barranca</item>
+
+    </string-array>
+    <string-array name="distritos">
+        <item>Pachacutec</item>
+        <item>La Tinguiña</item>
+        <item>Yauca del Rosario</item>
+        <item>Chincha Alta</item>
+        <item>Chavin</item>
+        <item>Chincha Baja</item>
+        <item>Pisco</item>
+        <item>Samuel Pastor</item>
+        <item>Quilca</item>
+
+        <item>Chorrillos</item>
+        <item>Barranco</item>
+        <item>San Borja</item>
+        <item>Lurin</item>
+        <item>Villa el Salvador</item>
+        <item>Villa Maria del Triunfo</item>
+    </string-array>
 </resources>
