@@ -26,6 +26,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions{
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
+    }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -33,6 +40,38 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Stetho
+    implementation "com.facebook.stetho:stetho:1.5.1"
+    implementation "com.facebook.stetho:stetho-okhttp3:1.5.1"
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
+
+    //Libreia Spinner
+    implementation 'com.github.ganfra:material-spinner:2.0.0'
+
+    //ImagenView Circle
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //Carrusel
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+
+    //Sweet Alert
+    implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+
+    // Picasso
+    implementation "com.squareup.picasso:picasso:2.71828"
+
+    //pdfViewer
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
