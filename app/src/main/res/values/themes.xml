@@ -16,4 +16,13 @@
 
     <style name="Theme.LupiApp" parent="Base.Theme.LupiApp" />
 
+    <style name="Theme.LupiApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.LupiApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.LupiApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

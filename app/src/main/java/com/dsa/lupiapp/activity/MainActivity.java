@@ -1,8 +1,10 @@
-package com.dsa.lupiapp;
+package com.dsa.lupiapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.dsa.lupiapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
