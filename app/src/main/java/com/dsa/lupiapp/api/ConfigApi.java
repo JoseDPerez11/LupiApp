@@ -21,6 +21,8 @@ public class ConfigApi {
     public static Retrofit retrofit;
     private static String token = "";
 
+    private static UsuarioApi usuarioApi;
+
     static {
         initClient();
     }
@@ -60,6 +62,13 @@ public class ConfigApi {
     private static void setToken(String value) {
         token = value;
         initClient();
+    }
+
+    public static UsuarioApi getUsuarioApi() {
+        if (usuarioApi == null) {
+            usuarioApi = retrofit.create(UsuarioApi.class);
+        }
+        return usuarioApi;
     }
 
 }

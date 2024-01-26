@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 public interface UsuarioApi {
     String base = "api/usuario";
 
+    // Llamada asíncrona que espera obtener una respuesta encapsulada en un GenericResponse que contiene un objeto de tipo Usuario
     @FormUrlEncoded
     @POST(base + "/login")
     Call<GenericResponse<Usuario>> login(@Field("email") String email, @Field("pass") String contrasenia);
