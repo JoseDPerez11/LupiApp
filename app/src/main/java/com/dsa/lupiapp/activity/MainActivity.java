@@ -7,9 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.databinding.ActivityMainBinding;
+import com.dsa.lupiapp.databinding.CustomToastOkBinding;
 import com.dsa.lupiapp.entity.service.Usuario;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 // Se verifica la respuesta obtenida del intento de inicio de sesión
                 if (response.getRpta() == 1) {
                     // Si la respuesta es exitosa (rpta = 1), se muestra un mensaje y se realiza el siguiente conjunto de acciones
-                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                    toastCorrecto(response.getMessage());
 
                     // Se obtiene el objeto Usuario desde la respuesta
                     Usuario usuario = response.getBody();
@@ -87,4 +93,16 @@ public class MainActivity extends AppCompatActivity {
             });
         });
     }
+
+    public void toastCorrecto(String message) {
+        CustomToastOkBinding bindingToast = CustomToastOkBinding.inflate(getLayoutInflater());
+        bindingToast.txtMensajeToastOk.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(bindingToast.getRoot());
+        toast.show();
+
+    }
+
 }

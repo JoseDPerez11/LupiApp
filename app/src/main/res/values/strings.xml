@@ -15,6 +15,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Cerrar Sesión</string>
     <string name="descripcion_producto">Es un producto de prueba, estoy haciendo pruebas, ojalá si compile y pueda mimir temprano.</string>
+    <string name="toast_ok">Excelente, Iniciaste Sesión</string>
 
     <string name="menu_home">Inicio</string>
     <string name="menu_gallery">Mis Compras</string>
