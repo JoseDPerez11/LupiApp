@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConfigApi {
 
-    public static final String baseUrlE = "http://10.0.2.2:9090";
+    public static final String baseUrlE = "http://192.168.18.10:9090";
     public static Retrofit retrofit;
     private static String token = "";
 
