@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.databinding.ActivityMainBinding;
+import com.dsa.lupiapp.databinding.CustomToastErrorBinding;
 import com.dsa.lupiapp.databinding.CustomToastOkBinding;
 import com.dsa.lupiapp.entity.service.Usuario;
 import com.dsa.lupiapp.utils.DateSerializer;
@@ -95,14 +96,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toastCorrecto(String message) {
+
         CustomToastOkBinding bindingToast = CustomToastOkBinding.inflate(getLayoutInflater());
         bindingToast.txtMensajeToastOk.setText(message);
+
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(bindingToast.getRoot());
         toast.show();
 
+    }
+
+    public void toastIncorrect(String message) {
+
+        CustomToastErrorBinding bindingToastErrpr = CustomToastErrorBinding.inflate(getLayoutInflater());
+        bindingToastErrpr.txtMensajeToastError.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(bindingToastErrpr.getRoot());
+        toast.show();
     }
 
 }
