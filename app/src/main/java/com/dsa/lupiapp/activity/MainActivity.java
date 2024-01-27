@@ -41,14 +41,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        // Se establece un listener para el evento de clic en el botón de inicio de sesión
         binding.btnIniciarSesion.setOnClickListener(viewModel -> {
-            usuarioViewModel.login(binding.edtMail.getText().toString(), binding.edtPassword.getText().toString()).observe(this, response -> {
+            // Se obtienen los valores ingresados por el usuario en los campos de correo y contraseña
+            String email = binding.edtMail.getText().toString();
+            String password = binding.edtPassword.getText().toString();
+
+            // Se realiza el intento de inicio de sesión a través del ViewModel asociado al usuario
+            usuarioViewModel.login(email, password).observe(this, response -> {
+
+                // Se verifica la respuesta obtenida del intento de inicio de sesión
                 if (response.getRpta() == 1) {
+                    // Si la respuesta es exitosa (rpta = 1), se muestra un mensaje y se realiza el siguiente conjunto de acciones
                     Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    // Se obtiene el objeto Usuario desde la respuesta
                     Usuario usuario = response.getBody();
+
+                    // Se guarda el objeto Usuario en SharedPreferences para persistencia entre sesiones
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
+                    // Se utiliza Gson para convertir el objeto Usuario a formato JSON y guardarlo en SharedPreferences
                     final Gson gson = new GsonBuilder()
                             .registerTypeAdapter(Date.class, new DateSerializer())
                             .registerTypeAdapter(Time.class, new TimeSerializer())
@@ -58,12 +72,16 @@ public class MainActivity extends AppCompatActivity {
                     }.getType()));
 
                     editor.apply();
+
+                    // Se limpian los campos de correo y contraseña
                     binding.edtMail.setText("");
                     binding.edtPassword.setText("");
 
+                    // Se inicia una nueva actividad (InicioActivity) después de un inicio de sesión exitoso
                     startActivity(new Intent(this, InicioActivity.class));
 
                 } else {
+                    // Si la respuesta no es exitosa, se muestra un mensaje de error
                     Toast.makeText(this, "Ocurrió un error " + response.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
