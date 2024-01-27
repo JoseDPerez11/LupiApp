@@ -25,6 +25,9 @@
     <string name="menu_subtitle">Administración</string>
     <string name="menu_product">Productos</string>
     <string name="menu_category">Categorías</string>
+
+    <string name="item_inicio_contactanos">Contáctanos</string>
+    <string name="item_inicio_cerrar_sesion">Cerrar Sesión</string>
     
     
     <string name="comprar_p">Comprar</string>
