@@ -16,6 +16,6 @@ public interface DocumentoAlmacenadoApi {
 
     @Multipart
     @POST(base)
-    Call<GenericResponse<DocumentoAlmacenado>> save(@Part MultipartBody.Part file, @Part("nombre") RequestBody requestBody);
+    Call<GenericResponse<DocumentoAlmacenado>> guardarDocumentoAlmacenado(@Part MultipartBody.Part file, @Part("nombre") RequestBody requestBody);
 
 }

@@ -18,6 +18,6 @@ public interface UsuarioApi {
     Call<GenericResponse<Usuario>> login(@Field("email") String email, @Field("pass") String contrasenia);
 
     @POST(base)
-    Call<GenericResponse<Usuario>> save(@Body Usuario usuario);
+    Call<GenericResponse<Usuario>> guardarUsuario(@Body Usuario usuario);
 
 }

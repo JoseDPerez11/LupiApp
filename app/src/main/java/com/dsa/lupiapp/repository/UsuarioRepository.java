@@ -62,7 +62,7 @@ public class UsuarioRepository {
         final MutableLiveData<GenericResponse<Usuario>> mutableLiveData = new MutableLiveData<>();
 
         // Se realiza una solicitud a través de usuarioApi.save para guardar el usuario.
-        this.usuarioApi.save(usuario).enqueue(new Callback<GenericResponse<Usuario>>() {
+        this.usuarioApi.guardarUsuario(usuario).enqueue(new Callback<GenericResponse<Usuario>>() {
             @Override
             public void onResponse(Call<GenericResponse<Usuario>> call, Response<GenericResponse<Usuario>> response) {
                 // Se establece el valor del MutableLiveData con la respuesta del servidor.
