@@ -15,10 +15,10 @@ import retrofit2.Response;
 public class UsuarioRepository {
 
     private static UsuarioRepository repository;
-    private final UsuarioApi api;
+    private final UsuarioApi usuarioApi;
 
     public UsuarioRepository() {
-        this.api = ConfigApi.getUsuarioApi();
+        this.usuarioApi = ConfigApi.getUsuarioApi();
     }
 
     public static UsuarioRepository getInstance() {
@@ -34,7 +34,7 @@ public class UsuarioRepository {
         final MutableLiveData<GenericResponse<Usuario>> mutableLiveData = new MutableLiveData<>();
 
         // Se realiza una llamada asincrónica utilizando Retrofit.
-        this.api.login(email, contrasenia).enqueue(new Callback<GenericResponse<Usuario>>() {
+        this.usuarioApi.login(email, contrasenia).enqueue(new Callback<GenericResponse<Usuario>>() {
             @Override
             public void onResponse(Call<GenericResponse<Usuario>> call, Response<GenericResponse<Usuario>> response) {
                 // En caso de respuesta exitosa, se establece el valor del MutableLiveData con el cuerpo de la respuesta.
@@ -53,6 +53,33 @@ public class UsuarioRepository {
         });
 
         // Se retorna el MutableLiveData que eventualmente contendrá la respuesta del servicio web.
+        return mutableLiveData;
+    }
+
+    // La función devuelve LiveData, que es un contenedor observable para los datos.
+    public LiveData<GenericResponse<Usuario>> save(Usuario usuario) {
+        // MutableLiveData es una implementación de LiveData que permite modificar sus datos.
+        final MutableLiveData<GenericResponse<Usuario>> mutableLiveData = new MutableLiveData<>();
+
+        // Se realiza una solicitud a través de usuarioApi.save para guardar el usuario.
+        this.usuarioApi.save(usuario).enqueue(new Callback<GenericResponse<Usuario>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<Usuario>> call, Response<GenericResponse<Usuario>> response) {
+                // Se establece el valor del MutableLiveData con la respuesta del servidor.
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<Usuario>> call, Throwable t) {
+                // Se establece un GenericResponse vacío en caso de error.
+                mutableLiveData.setValue(new GenericResponse<>());
+
+                // Se imprime un mensaje de error y se muestra el rastreo de la pila.
+                System.out.println("Se ha producido un error: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+
         return mutableLiveData;
     }
 
