@@ -4,6 +4,7 @@ import com.dsa.lupiapp.entity.GenericResponse;
 import com.dsa.lupiapp.entity.service.Usuario;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -15,5 +16,8 @@ public interface UsuarioApi {
     @FormUrlEncoded
     @POST(base + "/login")
     Call<GenericResponse<Usuario>> login(@Field("email") String email, @Field("pass") String contrasenia);
+
+    @POST(base)
+    Call<GenericResponse<Usuario>> save(@Body Usuario usuario);
 
 }
