@@ -108,6 +108,19 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        this.textChangedListener();
+
+    }
+
+    private void registerUser() {
+        binding.txtNuevoUsuario.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegistrarUsuarioActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        });
+    }
+
+    private void textChangedListener() {
         binding.edtMail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -132,15 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) { }
-        });
-            
-    }
-
-    private void registerUser() {
-        binding.txtNuevoUsuario.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RegistrarUsuarioActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
         });
     }
 
