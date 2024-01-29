@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.initViewModel();
         this.init();
+        this.registerUser();
     }
 
     private void initViewModel() {
@@ -133,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) { }
         });
             
+    }
+
+    private void registerUser() {
+        binding.txtNuevoUsuario.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegistrarUsuarioActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        });
     }
 
 
