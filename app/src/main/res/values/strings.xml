@@ -28,6 +28,10 @@
 
     <string name="item_inicio_contactanos">Contáctanos</string>
     <string name="item_inicio_cerrar_sesion">Cerrar Sesión</string>
+    <string name="register_toolbar">Registrar Usuario</string>
+    <string name="register_title">Subir imagen para tu perfil</string>
+    <string name="register_button">Subir Imagen</string>
+    <string name="register_subtitle2">Registar Datos Personales</string>
 
 
     <string name="comprar_p">Comprar</string>

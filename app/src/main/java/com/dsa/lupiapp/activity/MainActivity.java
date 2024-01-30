@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     public void toastCorrecto(String message) {
 
         CustomToastOkBinding bindingToast = CustomToastOkBinding.inflate(getLayoutInflater());
