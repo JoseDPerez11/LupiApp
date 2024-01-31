@@ -1,13 +1,18 @@
 package com.dsa.lupiapp.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.dsa.lupiapp.R;
@@ -29,6 +34,13 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         binding = ActivityRegistrarUsuarioBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        this.init();
+    }
+
+    private void init() {
+        binding.btnSubirImagen.setOnClickListener(v -> {
+            cargarImagen();
+        });
     }
 
     @Override
@@ -63,6 +75,55 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void cargarImagen() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la aplicación"), 10);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Verifica si el resultado de la actividad es RESULT_OK (operación exitosa)
+        if (resultCode == RESULT_OK) {
+            // Obtiene el URI de los datos devueltos por la actividad
+            Uri uri = data.getData();
+
+            // Obtiene la ruta real del archivo utilizando el URI
+            final String realPath = getRealPathFromURI(uri);
+            // Crea un objeto File con la ruta real del archivo
+            this.file = new File(realPath);
+            // Establece la imagen del usuario en un ImageView utilizando el URI
+            this.binding.imageUser.setImageURI(uri);
+        }
+    }
+
+    // Función para obtener la ruta real de un URI dado
+    private String getRealPathFromURI(Uri contentUri) {
+        String result;
+
+        // Consulta el proveedor de contenido para obtener información sobre el URI
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+
+        // Verifica si la consulta devuelve un cursor válido
+        if (cursor == null) {
+            // Si el cursor es nulo, utiliza la ruta del URI directamente
+            result = contentUri.getPath();
+        } else {
+            // Si hay un cursor, mueve el cursor al primer resultado
+            cursor.moveToFirst();
+            // Obtiene el índice de la columna que contiene la ruta del archivo en el proveedor de contenido
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            // Obtiene la ruta del archivo desde el cursor usando el índice
+            result = cursor.getString(idx);
+            // Cierra el cursor después de obtener la información necesaria
+            cursor.close();
+        }
+
+        // Devuelve la ruta real del archivo
+        return result;
     }
 
     private boolean validate() {
