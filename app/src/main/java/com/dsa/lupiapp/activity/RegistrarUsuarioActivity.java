@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,6 +20,9 @@ import android.widget.Toast;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.databinding.ActivityRegistrarUsuarioBinding;
+import com.dsa.lupiapp.viewmodel.ClienteViewModel;
+import com.dsa.lupiapp.viewmodel.DocumentoAlmacenadoViewModel;
+import com.dsa.lupiapp.viewmodel.UsuarioViewModel;
 
 import java.io.File;
 
@@ -27,6 +31,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class RegistrarUsuarioActivity extends AppCompatActivity {
 
     private File file;
+    private ClienteViewModel clienteViewModel;
+    private UsuarioViewModel usuarioViewModel;
+    private DocumentoAlmacenadoViewModel documentoAlmacenadoViewModel;
     private ActivityRegistrarUsuarioBinding binding;
     private final static int LOCATION_REQUEST_CODE = 23;
 
@@ -37,11 +44,27 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         this.init();
+        this.initViewModel();
+        this.spinners();
+    }
+
+    private void spinners() {
+    }
+
+    // Inicializa los ViewModels utilizados en esta actividad
+    private void initViewModel() {
+        // Crea una instancia de ViewModelProvider para obtener los ViewModels
+        final ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+
+        // Obtiene una instancia de los viewmodels a través del ViewModelProvider
+        this.clienteViewModel = viewModelProvider.get(ClienteViewModel.class);
+        this.usuarioViewModel = viewModelProvider.get(UsuarioViewModel.class);
+        this.documentoAlmacenadoViewModel = viewModelProvider.get(DocumentoAlmacenadoViewModel.class);
     }
 
     private void init() {
         binding.btnSubirImagen.setOnClickListener(v -> {
-            cargarImagen();
+            this.cargarImagen();
         });
 
         this.textChangedListener();
