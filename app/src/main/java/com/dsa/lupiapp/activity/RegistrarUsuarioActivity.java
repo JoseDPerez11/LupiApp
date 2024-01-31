@@ -13,6 +13,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
 import com.dsa.lupiapp.R;
@@ -41,6 +43,8 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         binding.btnSubirImagen.setOnClickListener(v -> {
             cargarImagen();
         });
+
+        this.textChangedListener();
     }
 
     @Override
@@ -49,11 +53,55 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         // Verifica si la aplicación tiene el permiso de lectura de almacenamiento externo
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
         PackageManager.PERMISSION_GRANTED) {
-
             // Si no tiene el permiso, solicita permisos al usuario
             ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE },
                     LOCATION_REQUEST_CODE);
         }
+    }
+
+    private void textChangedListener() {
+        binding.edtNameUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.txtInputNameUser.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        binding.edtApellidoPaternoU.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.txtInputApellidoPaternoU.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        binding.edtApellidoMaternoU.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.txtInputApellidoMaternoU.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
