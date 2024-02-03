@@ -194,22 +194,20 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
                                 // Utiliza el ViewModel de Usuario para guardar el usuario en el servidor
                                 this.usuarioViewModel.save(usuario).observe(this, usuarioResponse -> {
-                                    Toast.makeText(this, usuarioResponse.getMessage(), Toast.LENGTH_SHORT).show();
                                     if (usuarioResponse.getRpta() == 1) {
-                                        Toast.makeText(this, "Estupendo! Su información ha sido guardada con éxito en el sistema.", Toast.LENGTH_SHORT).show();
-                                        this.finish();
+                                        succesMessage("Estupendo! Su información ha sido guardada con éxito en el sistema.");
                                     } else {
-                                        Toast.makeText(this, "No se pudo guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                                        errorMessage("No se ha podido guardar los datos, intentelo de nuevo");
                                     }
                                 });
 
                             } else {
-                                Toast.makeText(this, "No se ha podido guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                                errorMessage("No se ha podido guardar los datos, intentelo de nuevo");
                             }
                         });
 
                     } else {
-                        Toast.makeText(this, "No se ha podido guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                        errorMessage("No se ha podido guardar los datos, intentelo de nuevo");
                     }
                 });
 
