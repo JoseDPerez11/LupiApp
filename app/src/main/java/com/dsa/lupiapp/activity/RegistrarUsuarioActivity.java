@@ -16,17 +16,27 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.databinding.ActivityRegistrarUsuarioBinding;
+import com.dsa.lupiapp.entity.service.Cliente;
+import com.dsa.lupiapp.entity.service.DocumentoAlmacenado;
+import com.dsa.lupiapp.entity.service.Usuario;
 import com.dsa.lupiapp.viewmodel.ClienteViewModel;
 import com.dsa.lupiapp.viewmodel.DocumentoAlmacenadoViewModel;
 import com.dsa.lupiapp.viewmodel.UsuarioViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.time.LocalDateTime;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class RegistrarUsuarioActivity extends AppCompatActivity {
 
@@ -35,7 +45,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
     private UsuarioViewModel usuarioViewModel;
     private DocumentoAlmacenadoViewModel documentoAlmacenadoViewModel;
     private ActivityRegistrarUsuarioBinding binding;
-    private final static int LOCATION_REQUEST_CODE = 23;
+    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,27 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
     }
 
     private void spinners() {
+
+        // Lista de tipos de documentos
+        String[] tipoDoc = getResources().getStringArray(R.array.tipoDoc);
+        ArrayAdapter arrayTipoDoc = new ArrayAdapter(this, R.layout.dropdown_item, tipoDoc);
+        binding.dropdownTipoDoc.setAdapter(arrayTipoDoc);
+
+        // Lista de departamentos
+        String[] departamentos = getResources().getStringArray(R.array.departamentos);
+        ArrayAdapter arrayDepartamentos = new ArrayAdapter(this, R.layout.dropdown_item, departamentos);
+        binding.dropdownDepartamento.setAdapter(arrayDepartamentos);
+
+        // Lista de provincias
+        String[] provincias = getResources().getStringArray(R.array.provincias);
+        ArrayAdapter arrayProvincias = new ArrayAdapter(this, R.layout.dropdown_item, provincias);
+        binding.dropdownProvincia.setAdapter(arrayProvincias);
+
+        // Lista de distritos
+        String[] distritos = getResources().getStringArray(R.array.distritos);
+        ArrayAdapter arrayDistritos = new ArrayAdapter(this, R.layout.dropdown_item, distritos);
+        binding.dropdownDistrito.setAdapter(arrayDistritos);
+
     }
 
     // Inicializa los ViewModels utilizados en esta actividad
@@ -62,25 +93,135 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         this.documentoAlmacenadoViewModel = viewModelProvider.get(DocumentoAlmacenadoViewModel.class);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Verifica si la aplicación tiene el permiso de lectura de almacenamiento externo
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Si no tiene el permiso, solicita permisos al usuario
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_MEDIA_IMAGES },
+                    LOCATION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Comprueba el código de solicitud de permisos
+        switch (requestCode) {
+            case LOCATION_REQUEST_CODE:
+                // Verifica si el usuario ha concedido el permiso
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Si el usuario concede el permiso, muestra un mensaje de agradecimiento
+                    Toast.makeText(this, "permiso para leer datos concedidos" , Toast.LENGTH_SHORT).show();
+                } else {
+                    // Si el usuario niega el permiso, muestra un mensaje indicando la necesidad de los permisos
+                    Toast.makeText(this, "Sin permiso para leer el almacenamiento.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
     private void init() {
         binding.btnSubirImagen.setOnClickListener(v -> {
             this.cargarImagen();
         });
 
+        binding.btnGuardarDatos.setOnClickListener(v -> {
+            this.guardarDatos();
+        });
+
         this.textChangedListener();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Verifica si la aplicación tiene el permiso de lectura de almacenamiento externo
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-        PackageManager.PERMISSION_GRANTED) {
-            // Si no tiene el permiso, solicita permisos al usuario
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE },
-                    LOCATION_REQUEST_CODE);
+    private void guardarDatos() {
+
+        Cliente cliente;
+        if (validate()) {
+            cliente = new Cliente();
+            try {
+                // Asigna los valores del formulario al objeto Cliente
+                cliente.setNombres(binding.edtNameUser.getText().toString());
+                cliente.setApellidoPaterno(binding.edtApellidoPaternoU.getText().toString());
+                cliente.setApellidoMaterno(binding.edtApellidoMaternoU.getText().toString());
+                cliente.setTipoDoc(binding.dropdownTipoDoc.getText().toString());
+                cliente.setNumDoc(binding.edtNumDocU.getText().toString());
+                cliente.setDepartamento(binding.dropdownDepartamento.getText().toString());
+                cliente.setProvincia(binding.dropdownProvincia.getText().toString());
+                cliente.setDistrito(binding.dropdownDistrito.getText().toString());
+                cliente.setTelefono(binding.edtTelefonoU.getText().toString());
+                cliente.setDireccionEnvio(binding.edtDireccionU.getText().toString());
+                cliente.setId(0);
+
+                // Obtiene la fecha y hora actual para generar un nombre único para el archivo
+                LocalDateTime localDateTime = LocalDateTime.now();
+
+                // Crea una solicitud para enviar el archivo (imagen) al servidor
+                RequestBody requestBody = RequestBody.create(file, MediaType.parse("multipart/form-data")), somedata;
+
+                // Crea una solicitud de datos (nombre del archivo)
+                String fileName = "" + localDateTime.getDayOfMonth()
+                        + (localDateTime.getMonthValue() + 1)
+                        + localDateTime.getYear()
+                        + localDateTime.getHour()
+                        + localDateTime.getMinute()
+                        + localDateTime.getSecond();
+
+                MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+                somedata = RequestBody.create("profilePh" + fileName, MediaType.parse("text/plain"));
+
+                // Utiliza el ViewModel de DocumentoAlmacenado para guardar el archivo en el servidor
+                this.documentoAlmacenadoViewModel.save(part, somedata).observe(this, response -> {
+                    if (response.getRpta() == 1) {
+                        // Configura la foto del cliente con el documento almacenado
+                        cliente.setFoto(new DocumentoAlmacenado());
+                        cliente.getFoto().setId(response.getBody().getId());
+
+                        // Utiliza el ViewModel de Cliente para guardar el cliente en el servidor
+                        this.clienteViewModel.save(cliente).observe(this, clienteResponse -> {
+                            if (clienteResponse.getRpta() == 1) {
+                                // Obtiene el id del cliente
+                                int idcliente = clienteResponse.getBody().getId();
+
+                                // Crea un objeto Usuario
+                                Usuario usuario = new Usuario();
+                                usuario.setEmail(binding.edtEmailUser.getText().toString());
+                                usuario.setClave(binding.edtPasswordUser.getText().toString());
+                                usuario.setVigencia(true);
+                                usuario.setCliente(new Cliente(idcliente));
+
+                                // Utiliza el ViewModel de Usuario para guardar el usuario en el servidor
+                                this.usuarioViewModel.save(usuario).observe(this, usuarioResponse -> {
+                                    Toast.makeText(this, usuarioResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                    if (usuarioResponse.getRpta() == 1) {
+                                        Toast.makeText(this, "Estupendo! Su información ha sido guardada con éxito en el sistema.", Toast.LENGTH_SHORT).show();
+                                        this.finish();
+                                    } else {
+                                        Toast.makeText(this, "No se pudo guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                Toast.makeText(this, "No se ha podido guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(this, "No se ha podido guardar los datos, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                warningMessage("Se ha producido un error: " + e.getMessage());
+            }
+        } else {
+            errorMessage("Por favor, complete todos los campos del formulario");
         }
+
     }
+
 
     private void textChangedListener() {
         binding.edtNameUser.addTextChangedListener(new TextWatcher() {
@@ -127,26 +268,6 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        // Comprueba el código de solicitud de permisos
-        switch (requestCode) {
-            case LOCATION_REQUEST_CODE:
-                // Verifica si el usuario ha concedido el permiso
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Si el usuario concede el permiso, muestra un mensaje de agradecimiento
-                    Toast.makeText(this, "Gracias por conceder los permisos para " +
-                            "leer el almacenamiento, estos permisos son necesarios para poder " +
-                            "escoger tu foto de perfil", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Si el usuario niega el permiso, muestra un mensaje indicando la necesidad de los permisos
-                    Toast.makeText(this, "No podemos realizar el registro si no nos concedes los permisos para leer el almacenamiento.", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-    }
 
     private void cargarImagen() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -217,7 +338,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
         if (this.file == null) {
             errorMessage("Debe de seleccionar una foto de perfil");
-            retorno = true;
+            retorno = false;
         }
         if (nombres.isEmpty()) {
             binding.txtInputNameUser.setError("Ingresar nombres");
