@@ -1,6 +1,9 @@
 package com.dsa.lupiapp.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
@@ -8,6 +11,7 @@ import com.dsa.lupiapp.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -55,6 +59,31 @@ public class InicioActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.inicio, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /*switch (item.getItemId()) {
+            case R.id.cerrarSesion:
+                this.logout();
+                break;
+        }
+        return super.onOptionsItemSelected(item);*/
+
+        if (item.getItemId() == R.id.cerrarSesion) {
+            this.logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("UsuarioJson");
+        editor.apply();
+        this.finish();
+        this.overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override
