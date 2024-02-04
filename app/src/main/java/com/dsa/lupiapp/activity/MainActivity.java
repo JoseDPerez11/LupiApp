@@ -191,4 +191,20 @@ public class MainActivity extends AppCompatActivity {
         return valorRetorno;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Obtener las preferencias compartidas por defecto de la aplicación
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Obtener el valor asociado a la clave "UsuarioJson" de las preferencias compartidas
+        String pref = preferences.getString("UsuarioJson", "");
+
+        // Verificar si hay un valor no vacío asociado a la clave "UsuarioJson"
+        if (!pref.equals("")) {
+            toastCorrecto("Se detecto una sesión activa, el login será omitido");
+            this.startActivity(new Intent(this, InicioActivity.class));
+            this.overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        }
+    }
 }
