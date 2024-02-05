@@ -30,6 +30,8 @@ import com.google.gson.reflect.TypeToken;
 import java.sql.Date;
 import java.sql.Time;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -206,5 +208,22 @@ public class MainActivity extends AppCompatActivity {
             this.startActivity(new Intent(this, InicioActivity.class));
             this.overridePendingTransition(R.anim.left_in, R.anim.left_out);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE).setTitleText("Has oprimido el botón de atrás")
+                .setContentText("¿Quieres cerrar la aplicación?")
+                .setCancelText("No, Cancelar!").setConfirmText("Si, Cerrar")
+                .showCancelButton(true).setCancelClickListener(sweetDialog -> {
+                    sweetDialog.dismissWithAnimation();
+                    new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE).setTitleText("Operacion Cancelada")
+                            .setContentText("No saliste de la app")
+                            .show();
+                }).setConfirmClickListener(sweetAlertDialog -> {
+                    sweetAlertDialog.dismissWithAnimation();
+                    System.exit(0);
+                }).show();
     }
 }
