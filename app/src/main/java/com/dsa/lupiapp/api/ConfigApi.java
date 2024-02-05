@@ -44,7 +44,7 @@ public class ConfigApi {
 
     }
 
-    private static OkHttpClient getClient() {
+    public static OkHttpClient getClient() {
 
         HttpLoggingInterceptor loggin = new HttpLoggingInterceptor();
         loggin.level(HttpLoggingInterceptor.Level.BODY);
