@@ -96,18 +96,19 @@ public class InicioActivity extends AppCompatActivity {
                 .registerTypeAdapter(Date.class, new DateSerializer())
                 .registerTypeAdapter(Time.class, new TimeSerializer())
                 .create();
+
         String usuarioJson = sharedPreferences.getString("UsuarioJson", null);
         if (usuarioJson != null) {
             final Usuario usuario = gson.fromJson(usuarioJson, Usuario.class);
             final View viewHeader = binding.navView.getHeaderView(0);
             final TextView tvNombre = viewHeader.findViewById(R.id.tvNombre);
             final TextView tvCorreo =  viewHeader.findViewById(R.id.tvCorreo);
+            final CircleImageView imgFoto = viewHeader.findViewById(R.id.imageView);
 
             tvNombre.setText(usuario.getCliente().getNombreCompleto());
             tvCorreo.setText(usuario.getEmail());
-            final CircleImageView imgFoto = viewHeader.findViewById(R.id.imageView);
 
-            String url = ConfigApi.baseUrlE + "/api/documento-almacenado/download" + usuario.getCliente().getFoto().getFileName();
+            String url = ConfigApi.baseUrlE + "/api/documento-almacenado/download/" + usuario.getCliente().getFoto().getFileName();
             final Picasso picasso = new Picasso.Builder(this)
                     .downloader(new OkHttp3Downloader(ConfigApi.getClient()))
                     .build();
