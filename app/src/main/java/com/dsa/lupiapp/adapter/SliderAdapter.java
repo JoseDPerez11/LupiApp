@@ -22,7 +22,6 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
     private Context context;
     private List<SliderItem> sliderItems = new ArrayList<>();
-
     public SliderAdapter(Context context) {
         this.context = context;
     }

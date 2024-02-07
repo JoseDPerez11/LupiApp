@@ -45,7 +45,6 @@ public class InicioFragment extends Fragment {
 
     private void init(View view) {
         svCarrusel = view.findViewById(R.id.svCarrusel);
-
     }
 
     private void initAdapter() {

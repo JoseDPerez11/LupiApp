@@ -3,6 +3,7 @@ package com.dsa.lupiapp.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -82,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                     .registerTypeAdapter(Date.class, new DateSerializer())
                                     .registerTypeAdapter(Time.class, new TimeSerializer())
                                     .create();
-                            editor.putString("UsuarioJson", gson.toJson(usuario, new TypeToken<Usuario>(){
-
-                            }.getType()));
+                            editor.putString("UsuarioJson", gson.toJson(usuario, new TypeToken<Usuario>(){ }.getType()));
 
                             editor.apply();
 
@@ -210,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE).setTitleText("Has oprimido el botón de atrás")
                 .setContentText("¿Quieres cerrar la aplicación?")
                 .setCancelText("No, Cancelar!").setConfirmText("Si, Cerrar")
