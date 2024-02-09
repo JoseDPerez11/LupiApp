@@ -35,34 +35,44 @@ public class InicioFragment extends Fragment {
     private SliderAdapter sliderAdapter;
     private FragmentInicioBinding binding;
 
+
+    // Método llamado cuando se crea la vista del fragmento
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        // Inflar el diseño del fragmento utilizando View Binding
         binding = FragmentInicioBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
+    // Método llamado después de que la vista del fragmento se haya creado
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Inicializar los componentes y cargar los datos
         init(view);
         initAdapter();
         loadData();
     }
 
-
+    // Método para inicializar los componentes del fragmento
     private void init(View view) {
+        // Obtener referencias a los componentes de la vista
         svCarrusel = view.findViewById(R.id.svCarrusel);
+
+        // Este proveedor se utiliza para obtener o crear instancias de ViewModels asociados con este fragmento.
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);
         categoriaViewModel = viewModelProvider.get(CategoriaViewModel.class);
+
         gvCategorias = view.findViewById(R.id.gvCategorias);
     }
 
+    // Método para inicializar los adaptadores del carrusel y la cuadrícula de categorías
     private void initAdapter() {
+        // Inicializar el adaptador del carrusel
         sliderAdapter = new SliderAdapter(getContext());
-
         svCarrusel.setSliderAdapter(sliderAdapter);
 
+        // Configurar opciones del carrusel
         svCarrusel.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         svCarrusel.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         svCarrusel.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
@@ -71,9 +81,12 @@ public class InicioFragment extends Fragment {
         svCarrusel.setScrollTimeInSec(4); //set scroll delay in seconds :
         svCarrusel.startAutoCycle();
 
+        // Inicializar el adaptador de la cuadrícula de categorías
         categoriaAdapter = new CategoriaAdapter(getContext(), R.layout.item_categories, new ArrayList<>());
         gvCategorias.setAdapter(categoriaAdapter);
     }
+
+    // Método para cargar los datos en el carrusel y la cuadrícula de categorías
 
     private void loadData() {
         List<SliderItem> lista = new ArrayList<>();
