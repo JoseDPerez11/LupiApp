@@ -20,7 +20,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="10dp"
                 app:cardCornerRadius="6dp">
 
                 <com.smarteist.autoimageslider.SliderView
@@ -43,8 +43,24 @@
 
             </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/san_francisco"
+                android:text="@string/fragment_subtitle_categories"
+                android:textColor="#fff"
+                android:textSize="24sp"/>
 
+            <GridView
+                android:id="@+id/gvCategorias"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:numColumns="3" />
+
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

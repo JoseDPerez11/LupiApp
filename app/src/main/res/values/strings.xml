@@ -33,6 +33,9 @@
     <string name="register_button">Subir Imagen</string>
     <string name="register_subtitle2">Registar Datos Personales</string>
 
+    <string name="item_subtitle_categoires">Categoria 1</string>
+    <string name="fragment_subtitle_categories">Categorias</string>
+
 
     <string name="comprar_p">Comprar</string>
     <string-array name="tipoDoc">

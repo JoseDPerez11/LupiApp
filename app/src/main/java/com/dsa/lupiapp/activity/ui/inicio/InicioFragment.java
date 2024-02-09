@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dsa.lupiapp.R;
+import com.dsa.lupiapp.adapter.CategoriaAdapter;
 import com.dsa.lupiapp.adapter.SliderAdapter;
 import com.dsa.lupiapp.databinding.FragmentInicioBinding;
 import com.dsa.lupiapp.entity.service.SliderItem;
+import com.dsa.lupiapp.viewmodel.CategoriaViewModel;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -22,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InicioFragment extends Fragment {
+
+    private CategoriaViewModel categoriaViewModel;
+    private GridView gvCategorias;
+    private CategoriaAdapter categoriaAdapter;
 
     private SliderView svCarrusel;
     private SliderAdapter sliderAdapter;
@@ -45,6 +53,9 @@ public class InicioFragment extends Fragment {
 
     private void init(View view) {
         svCarrusel = view.findViewById(R.id.svCarrusel);
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        categoriaViewModel = viewModelProvider.get(CategoriaViewModel.class);
+        gvCategorias = view.findViewById(R.id.gvCategorias);
     }
 
     private void initAdapter() {
@@ -59,6 +70,9 @@ public class InicioFragment extends Fragment {
         svCarrusel.setIndicatorUnselectedColor(Color.GRAY);
         svCarrusel.setScrollTimeInSec(4); //set scroll delay in seconds :
         svCarrusel.startAutoCycle();
+
+        categoriaAdapter = new CategoriaAdapter(getContext(), R.layout.item_categories, new ArrayList<>());
+        gvCategorias.setAdapter(categoriaAdapter);
     }
 
     private void loadData() {
@@ -69,5 +83,16 @@ public class InicioFragment extends Fragment {
         lista.add(new SliderItem(R.drawable.deliverylupita, "Contamos con servicio de delivery"));
 
         sliderAdapter.updateItem(lista);
+
+        categoriaViewModel.listarCategoriasActivas().observe(getViewLifecycleOwner(), response -> {
+            if (response.getRpta() == 1) {
+                categoriaAdapter.clear();
+                categoriaAdapter.addAll(response.getBody());
+                categoriaAdapter.notifyDataSetChanged();
+            } else {
+                System.out.println("Error al obtener categorias activas");
+            }
+        });
+
     }
 }
