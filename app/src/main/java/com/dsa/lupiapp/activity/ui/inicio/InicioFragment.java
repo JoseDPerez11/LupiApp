@@ -11,13 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.adapter.CategoriaAdapter;
+import com.dsa.lupiapp.adapter.ProductosRecomendadosAdapter;
 import com.dsa.lupiapp.adapter.SliderAdapter;
 import com.dsa.lupiapp.databinding.FragmentInicioBinding;
+import com.dsa.lupiapp.entity.service.Producto;
 import com.dsa.lupiapp.entity.service.SliderItem;
 import com.dsa.lupiapp.viewmodel.CategoriaViewModel;
+import com.dsa.lupiapp.viewmodel.ProductoViewModel;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -28,8 +33,15 @@ import java.util.List;
 public class InicioFragment extends Fragment {
 
     private CategoriaViewModel categoriaViewModel;
-    private GridView gvCategorias;
     private CategoriaAdapter categoriaAdapter;
+    private GridView gvCategorias;
+
+    private ProductoViewModel productoViewModel;
+    private RecyclerView rcvProductosRecomendados;
+    private ProductosRecomendadosAdapter productoAdapter;
+    private List<Producto> productos = new ArrayList<>();
+
+
 
     private SliderView svCarrusel;
     private SliderAdapter sliderAdapter;
@@ -61,9 +73,14 @@ public class InicioFragment extends Fragment {
 
         // Este proveedor se utiliza para obtener o crear instancias de ViewModels asociados con este fragmento.
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        categoriaViewModel = viewModelProvider.get(CategoriaViewModel.class);
 
+        categoriaViewModel = viewModelProvider.get(CategoriaViewModel.class);
         gvCategorias = view.findViewById(R.id.gvCategorias);
+
+        productoViewModel = viewModelProvider.get(ProductoViewModel.class);
+        rcvProductosRecomendados = view.findViewById(R.id.rcvProductosRecomendados);
+        rcvProductosRecomendados.setLayoutManager(new GridLayoutManager(getContext(), 1));
+
     }
 
     // Método para inicializar los adaptadores del carrusel y la cuadrícula de categorías
@@ -84,6 +101,9 @@ public class InicioFragment extends Fragment {
         // Inicializar el adaptador de la cuadrícula de categorías
         categoriaAdapter = new CategoriaAdapter(getContext(), R.layout.item_categories, new ArrayList<>());
         gvCategorias.setAdapter(categoriaAdapter);
+
+        productoAdapter = new ProductosRecomendadosAdapter(productos);
+        rcvProductosRecomendados.setAdapter(productoAdapter);
     }
 
     // Método para cargar los datos en el carrusel y la cuadrícula de categorías
@@ -105,6 +125,10 @@ public class InicioFragment extends Fragment {
             } else {
                 System.out.println("Error al obtener categorias activas");
             }
+        });
+
+        productoViewModel.listarProductosRecomendados().observe(getViewLifecycleOwner(), response -> {
+            productoAdapter.updateItems(response.getBody());
         });
 
     }

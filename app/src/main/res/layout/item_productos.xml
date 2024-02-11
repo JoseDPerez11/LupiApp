@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp" >
+        
+        <ImageView
+            android:id="@+id/imgProducto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/food_img2" />
+        
+        <RelativeLayout
+            android:layout_width="270dp"
+            android:layout_height="110dp"
+            android:layout_gravity="end"
+            android:padding="10dp" >
+            
+            <TextView
+                android:id="@+id/nameProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/san_francisco"
+                android:text="@string/fragment_product_item_name"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            
+            <ImageView
+                android:id="@+id/iv1"
+                android:layout_width="120dp"
+                android:layout_height="18dp"
+                android:layout_below="@+id/nameProducto"
+                android:src="@drawable/rating_orange_small"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv1"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/san_francisco"
+                android:text="@string/fragment_product_item_recommended"
+                android:textColor="#2e2e2e"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnOrdenar"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:backgroundTint="#FF8500"
+                android:fontFamily="@font/san_francisco"
+                android:text="Ordenar"
+                android:textColor="#fff"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+        
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
