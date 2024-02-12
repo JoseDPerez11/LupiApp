@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.api.ConfigApi;
+import com.dsa.lupiapp.databinding.ItemProductosPorCategoriaBinding;
 import com.dsa.lupiapp.entity.service.Producto;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -31,7 +32,7 @@ public class ProductosPorCategoriaAdapter extends RecyclerView.Adapter<Productos
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_productos_por_categoria, parent, false);
+        ItemProductosPorCategoriaBinding view = ItemProductosPorCategoriaBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(view);
     }
 
@@ -53,17 +54,11 @@ public class ProductosPorCategoriaAdapter extends RecyclerView.Adapter<Productos
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imgProductoCategoria;
-        private TextView nameProductoCategoria;
-        private TextView productoPriceCategoria;
-        private Button btnOrdenarProductoCategoria;
+        private ItemProductosPorCategoriaBinding binding;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.imgProductoCategoria = itemView.findViewById(R.id.imgProductoCategoria);
-            this.nameProductoCategoria = itemView.findViewById(R.id.txtnameProductoCategoria);
-            this.productoPriceCategoria = itemView.findViewById(R.id.txtPrecioProductoCategoria);
-            this.btnOrdenarProductoCategoria = itemView.findViewById(R.id.btnOrdenarCategoria);
+        public ViewHolder(@NonNull ItemProductosPorCategoriaBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void setItem(final Producto producto) {
@@ -74,11 +69,11 @@ public class ProductosPorCategoriaAdapter extends RecyclerView.Adapter<Productos
                     .build();
             picasso.load(url)
                     .error(R.drawable.image_not_found)
-                    .into(imgProductoCategoria);
+                    .into(binding.imgProductoCategoria);
 
-            nameProductoCategoria.setText(producto.getNombre());
-            productoPriceCategoria.setText(String.format(Locale.ENGLISH, "S/%.2f", producto.getPrecio()));
-            btnOrdenarProductoCategoria.setOnClickListener(view -> {
+            binding.txtnameProductoCategoria.setText(producto.getNombre());
+            binding.txtPrecioProductoCategoria.setText(String.format(Locale.ENGLISH, "S/%.2f", producto.getPrecio()));
+            binding.btnOrdenarCategoria.setOnClickListener(view -> {
                 Toast.makeText(this.itemView.getContext(), "Ordenar producto", Toast.LENGTH_SHORT).show();
             });
         }

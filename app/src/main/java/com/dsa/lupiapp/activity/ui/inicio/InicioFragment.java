@@ -36,6 +36,7 @@ public class InicioFragment extends Fragment {
     private CategoriaAdapter categoriaAdapter;
     private GridView gvCategorias;
 
+
     private ProductoViewModel productoViewModel;
     private RecyclerView rcvProductosRecomendados;
     private ProductosRecomendadosAdapter productoAdapter;

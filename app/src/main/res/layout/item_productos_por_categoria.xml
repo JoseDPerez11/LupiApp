@@ -41,7 +41,7 @@
                 android:id="@+id/iv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/nameProductoCategoria"
+                android:layout_below="@+id/txtnameProductoCategoria"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/rating_orange_small" />
 

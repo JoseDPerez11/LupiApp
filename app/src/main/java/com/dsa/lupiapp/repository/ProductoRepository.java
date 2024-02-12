@@ -30,11 +30,18 @@ public class ProductoRepository {
         return productoRepository;
     }
 
+    // Este método devuelve un LiveData que contiene una respuesta genérica que es una lista de productos.
     public LiveData<GenericResponse<List<Producto>>> listarProductosRecomendados() {
+        // Se crea un objeto MutableLiveData para almacenar la respuesta.
         final MutableLiveData<GenericResponse<List<Producto>>> mutableLiveData = new MutableLiveData<>();
+
+        // Se realiza una llamada asíncrona a la API para listar los productos recomendados.
         this.productoApi.listarProductosRecomendados().enqueue(new Callback<GenericResponse<List<Producto>>>() {
+
+            // Este método se llama cuando se recibe una respuesta exitosa desde la API.
             @Override
             public void onResponse(Call<GenericResponse<List<Producto>>> call, Response<GenericResponse<List<Producto>>> response) {
+                // Se establece el valor del MutableLiveData con la respuesta recibida.
                 mutableLiveData.setValue(response.body());
             }
 
@@ -44,6 +51,7 @@ public class ProductoRepository {
                 t.printStackTrace();
             }
         });
+        // Se devuelve el MutableLiveData que contiene la respuesta.
         return mutableLiveData;
     }
 
