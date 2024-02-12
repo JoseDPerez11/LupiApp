@@ -53,12 +53,31 @@
                 android:textColor="#fff"
                 android:textSize="24sp"/>
 
-            <GridView
-                android:id="@+id/gvCategorias"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:numColumns="3" />
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="1500dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <GridView
+                            android:id="@+id/gvCategorias"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:columnWidth="150dp"
+                            android:numColumns="10"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="none"
+                            android:verticalSpacing="1dp"/>
+                    </LinearLayout>
+                </FrameLayout>
+            </HorizontalScrollView>
 
             <TextView
                 android:layout_width="wrap_content"
