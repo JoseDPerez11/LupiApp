@@ -29,8 +29,8 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
 
     @NonNull
     @Override
-    public ProductosRecomendadosAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_categories, parent, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_productos, parent, false);
         return new ViewHolder(view);
     }
 
@@ -56,7 +56,7 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
         }
 
         public void setItem(final Producto producto) {
-            ImageView imgProducto = itemView.findViewById(R.id.imgCategoria);
+            ImageView imgProducto = itemView.findViewById(R.id.imgProducto);
             TextView nameProducto = itemView.findViewById(R.id.nameProducto);
             Button btnOrdenar = itemView.findViewById(R.id.btnOrdenar);
 

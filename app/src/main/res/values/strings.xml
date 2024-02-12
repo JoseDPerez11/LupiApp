@@ -39,6 +39,12 @@
     <string name="fragment_product_item_recommended">Producto Recomendado</string>
     <string name="fragment_product_title_recommended">Productos Recomendados</string>
 
+    <string name="fragment_price">10.00</string>
+    <string name="fragment_btn_order">Ordenar</string>
+    <string name="fragment_toolbar_title">Productos por Categoria</string>
+    <string name="fragment_title">Listado de Productos</string>
+
+
     <string name="comprar_p">Comprar</string>
     <string-array name="tipoDoc">
         <item>DNI</item>

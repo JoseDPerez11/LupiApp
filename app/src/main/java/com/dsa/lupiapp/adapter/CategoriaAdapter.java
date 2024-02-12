@@ -1,6 +1,7 @@
 package com.dsa.lupiapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dsa.lupiapp.R;
+import com.dsa.lupiapp.activity.ListarProductosPorCategoriaActivity;
 import com.dsa.lupiapp.api.ConfigApi;
 import com.dsa.lupiapp.entity.service.Categoria;
 import com.squareup.picasso.OkHttp3Downloader;
@@ -58,6 +60,12 @@ public class CategoriaAdapter extends ArrayAdapter<Categoria> {
 
         // Establece el nombre de la categoría en el TextView
         txtNombreCategoria.setText(categoria.getNombre());
+
+        convertView.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), ListarProductosPorCategoriaActivity.class);
+            intent.putExtra("idC", categoria.getId());
+            getContext().startActivity(intent);
+        });
 
         // Devuelve la vista actualizada
         return convertView;
