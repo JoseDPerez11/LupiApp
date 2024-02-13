@@ -44,6 +44,15 @@
     <string name="fragment_toolbar_title">Productos por Categoria</string>
     <string name="fragment_title">Listado de Productos</string>
 
+    <string name="item_compras_id">Codigo Compras : </string>
+    <string name="item_compras_id_value">C0001</string>
+    <string name="item_compras_date">Fecha Compras :  </string>
+    <string name="item_compras_date_value">10/07/2021</string>
+    <string name="item_compras_amount">Monto : </string>
+    <string name="item_compras_amount_value">S/. 3500.00</string>
+    <string name="item_compras_state">Estado del Pedido : </string>
+    <string name="item_compras_state_value">Despachado y Enviando ...</string>
+
 
     <string name="comprar_p">Comprar</string>
     <string-array name="tipoDoc">
