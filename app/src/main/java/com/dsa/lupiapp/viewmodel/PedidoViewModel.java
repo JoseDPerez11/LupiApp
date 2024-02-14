@@ -16,9 +16,9 @@ import java.util.List;
 public class PedidoViewModel extends AndroidViewModel {
 
     private final PedidoRepository repository;
-    public PedidoViewModel(@NonNull Application application, PedidoRepository repository) {
+    public PedidoViewModel(@NonNull Application application) {
         super(application);
-        this.repository = repository;
+        this.repository = PedidoRepository.getInstance();
     }
 
     public LiveData<GenericResponse<List<PedidoConDetallesDTO>>> listarPedidosPorCliente(int idCli){

@@ -53,6 +53,16 @@
     <string name="item_compras_state">Estado del Pedido : </string>
     <string name="item_compras_state_value">Despachado y Enviando ...</string>
 
+    <string name="item_compra_detalle_cod">Código Compras : </string>
+    <string name="item_compra_detalle_cod_value">C0001 </string>
+    <string name="item_compra_detalle_product">Producto : </string>
+    <string name="item_compra_detalle_product_value">Producto 2</string>
+    <string name="item_compra_detalle_quantity">Cantidad :  </string>
+    <string name="item_compra_detalle_quantity_value">2</string>
+    <string name="item_compra_detalle_price">Precio Unitario : </string>
+    <string name="item_compra_detalle_price_value">S/. 25.00</string>
+
+    <string name="activity_detalle_compras_toolbar">Detalle Compras</string>
 
     <string name="comprar_p">Comprar</string>
     <string-array name="tipoDoc">

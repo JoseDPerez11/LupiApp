@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -7,19 +8,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dsa.lupiapp.R;
+import com.dsa.lupiapp.activity.ui.compras.DetalleMisComprasActivity;
+import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.databinding.ItemMisComprasBinding;
 import com.dsa.lupiapp.entity.service.dto.PedidoConDetallesDTO;
+import com.dsa.lupiapp.utils.DateSerializer;
+import com.dsa.lupiapp.utils.TimeSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.ViewHolder> {
 
-    private List<PedidoConDetallesDTO> pedidosConDetalle;
+    private final List<PedidoConDetallesDTO> pedidos;
+    private final Communication communication;
 
-    public MisComprasAdapter(List<PedidoConDetallesDTO> pedidosConDetalle) {
-        this.pedidosConDetalle = pedidosConDetalle;
+    public MisComprasAdapter(List<PedidoConDetallesDTO> pedidos, Communication communication) {
+        this.pedidos = pedidos;
+        this.communication = communication;
     }
 
     @NonNull
@@ -31,17 +42,17 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setItem(this.pedidosConDetalle.get(position));
+        holder.setItem(this.pedidos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return pedidosConDetalle.size();
+        return pedidos.size();
     }
 
     public void updateItems(List<PedidoConDetallesDTO> pedido) {
-        this.pedidosConDetalle.clear();
-        this.pedidosConDetalle.addAll(pedido);
+        this.pedidos.clear();
+        this.pedidos.addAll(pedido);
         this.notifyDataSetChanged();
     }
 
@@ -51,6 +62,7 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
 
         public ViewHolder(@NonNull ItemMisComprasBinding binding) {
             super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void setItem(final PedidoConDetallesDTO pedidoDetalleDto) {
@@ -58,6 +70,17 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
             binding.txtValueDatePurchases.setText(pedidoDetalleDto.getPedido().getFechaCompra().toString());
             binding.txtValueAmount.setText(String.format(Locale.ENGLISH, "S/%.2f", pedidoDetalleDto.getPedido().getMonto()));
             binding.txtValueOrder.setText(pedidoDetalleDto.getPedido().isAnularPedido() ? "Pedido Cancelado" : "Despachado, en proceso de envío");
+
+            itemView.setOnClickListener(view -> {
+                final Intent intent = new Intent(itemView.getContext(), DetalleMisComprasActivity.class);
+                final Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Date.class, new DateSerializer())
+                        .registerTypeAdapter(Time.class, new TimeSerializer())
+                        .create();
+
+                intent.putExtra("detailsPurchases", gson.toJson(pedidoDetalleDto.getDetallePedido()));
+                communication.showDetails(intent);
+            });
         }
 
     }

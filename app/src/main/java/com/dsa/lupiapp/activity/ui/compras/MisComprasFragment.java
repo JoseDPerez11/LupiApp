@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.activity.ui.compras;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,7 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.adapter.MisComprasAdapter;
+import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.databinding.FragmentMisComprasBinding;
 import com.dsa.lupiapp.entity.service.Usuario;
 import com.dsa.lupiapp.utils.DateSerializer;
@@ -27,7 +30,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class MisComprasFragment extends Fragment {
+public class MisComprasFragment extends Fragment implements Communication {
 
     private PedidoViewModel pedidoViewModel;
     private RecyclerView rcvPedidos;
@@ -45,14 +48,11 @@ public class MisComprasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init(view);
+
+        rcvPedidos = binding.rcvMisCompras;
         initViewModel();
         initAdapter();
         loadData();
-    }
-
-    private void init(View view) {
-
     }
 
     private void initViewModel() {
@@ -61,7 +61,7 @@ public class MisComprasFragment extends Fragment {
     }
 
     private void initAdapter() {
-        misComprasAdapter = new MisComprasAdapter(new ArrayList<>());
+        misComprasAdapter = new MisComprasAdapter(new ArrayList<>(), this);
         rcvPedidos.setLayoutManager(new GridLayoutManager(getContext(), 1));
         rcvPedidos.setAdapter(misComprasAdapter);
     }
@@ -82,4 +82,9 @@ public class MisComprasFragment extends Fragment {
         }
     }
 
+    @Override
+    public void showDetails(Intent intent) {
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
 }
