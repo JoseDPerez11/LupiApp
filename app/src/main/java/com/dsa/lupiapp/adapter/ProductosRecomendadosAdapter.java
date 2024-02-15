@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +13,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dsa.lupiapp.R;
+import com.dsa.lupiapp.activity.DetalleProductoActivity;
 import com.dsa.lupiapp.api.ConfigApi;
+import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.entity.service.Producto;
+import com.dsa.lupiapp.utils.DateSerializer;
+import com.dsa.lupiapp.utils.TimeSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<ProductosRecomendadosAdapter.ViewHolder> {
 
     private List<Producto> productos;
+    private final Communication communication;
 
-    public ProductosRecomendadosAdapter(List<Producto> productos) {
+    public ProductosRecomendadosAdapter(List<Producto> productos, Communication communication) {
         this.productos = productos;
+        this.communication = communication;
     }
 
     @NonNull
@@ -70,6 +81,16 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
             nameProducto.setText(producto.getNombre());
             btnOrdenar.setOnClickListener(v-> {
                 Toast.makeText(itemView.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
+            });
+
+            itemView.setOnClickListener(v -> {
+                final Intent intent = new Intent(itemView.getContext(), DetalleProductoActivity.class);
+                final Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Date.class, new DateSerializer())
+                        .registerTypeAdapter(Time.class, new TimeSerializer())
+                        .create();
+                intent.putExtra("detalleProducto", gson.toJson(producto));
+                communication.showDetails(intent);
             });
 
         }

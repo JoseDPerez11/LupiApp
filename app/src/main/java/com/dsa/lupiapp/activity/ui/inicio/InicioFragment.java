@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.activity.ui.inicio;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.adapter.CategoriaAdapter;
 import com.dsa.lupiapp.adapter.ProductosRecomendadosAdapter;
 import com.dsa.lupiapp.adapter.SliderAdapter;
+import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.databinding.FragmentInicioBinding;
 import com.dsa.lupiapp.entity.service.Producto;
 import com.dsa.lupiapp.entity.service.SliderItem;
@@ -30,7 +32,7 @@ import com.smarteist.autoimageslider.SliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InicioFragment extends Fragment {
+public class InicioFragment extends Fragment implements Communication {
 
     private CategoriaViewModel categoriaViewModel;
     private CategoriaAdapter categoriaAdapter;
@@ -103,7 +105,7 @@ public class InicioFragment extends Fragment {
         categoriaAdapter = new CategoriaAdapter(getContext(), R.layout.item_categories, new ArrayList<>());
         gvCategorias.setAdapter(categoriaAdapter);
 
-        productoAdapter = new ProductosRecomendadosAdapter(productos);
+        productoAdapter = new ProductosRecomendadosAdapter(productos, this);
         rcvProductosRecomendados.setAdapter(productoAdapter);
     }
 
@@ -132,5 +134,11 @@ public class InicioFragment extends Fragment {
             productoAdapter.updateItems(response.getBody());
         });
 
+    }
+
+    @Override
+    public void showDetails(Intent intent) {
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }
