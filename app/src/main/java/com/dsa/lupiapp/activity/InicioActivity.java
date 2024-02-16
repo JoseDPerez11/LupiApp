@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -86,10 +87,20 @@ public class InicioActivity extends AppCompatActivity {
             // Indica que el evento de selección del menú ha sido manejado correctamente
             return true;
         }
+        if (item.getItemId() == R.id.bolsaCompras) {
+            this.mostrarBolsa();
+            return true;
+        }
 
         // Si el elemento del menú seleccionado no es "cerrarSesion",
         // delega el manejo del evento al método onOptionsItemSelected de la clase base
         return super.onOptionsItemSelected(item);
+    }
+
+    private void mostrarBolsa() {
+        Intent intent = new Intent(this, ProductosCarritoActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override

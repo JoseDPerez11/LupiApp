@@ -9,7 +9,9 @@ import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.api.ConfigApi;
 import com.dsa.lupiapp.databinding.ActivityDetalleMisComprasBinding;
 import com.dsa.lupiapp.databinding.ActivityDetalleProductoBinding;
+import com.dsa.lupiapp.entity.service.DetallePedido;
 import com.dsa.lupiapp.entity.service.Producto;
+import com.dsa.lupiapp.utils.Carrito;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
 import com.google.gson.Gson;
@@ -20,6 +22,8 @@ import com.squareup.picasso.Picasso;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetalleProductoActivity extends AppCompatActivity {
 
@@ -47,16 +51,16 @@ public class DetalleProductoActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        final String detallePedido = this.getIntent().getStringExtra("detalleProducto");
+        final String detalleString = this.getIntent().getStringExtra("detalleProducto");
 
-        if (detallePedido != null) {
+        if (detalleString != null) {
             Producto producto;
             final Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Date.class, new DateSerializer())
                     .registerTypeAdapter(Time.class, new TimeSerializer())
                     .create();
 
-            producto = gson.fromJson(detallePedido, Producto.class);
+            producto = gson.fromJson(detalleString, Producto.class);
 
             binding.tvNameProductoDetalle.setText(producto.getNombre());
             binding.tvPrecioProductoDetalle.setText(String.format(Locale.ENGLISH, "S/%.2f", producto.getPrecio()));
@@ -74,6 +78,15 @@ public class DetalleProductoActivity extends AppCompatActivity {
         } else {
             System.out.println("Error al obtener los detalles del producto");
         }
+
+        this.binding.btnAgregarCarrito.setOnClickListener(view -> {
+            DetallePedido detallePedido = new DetallePedido();
+            detallePedido.setProducto(producto);
+            detallePedido.setCantidad(1);
+            detallePedido.setPrecio(producto.getPrecio());
+            successMessage(Carrito.agregarProductos(detallePedido));
+        });
+
     }
 
     private void back() {
@@ -82,6 +95,12 @@ public class DetalleProductoActivity extends AppCompatActivity {
             this.finish();
             this.overridePendingTransition(R.anim.rigth_in, R.anim.rigth_out);
         });
+    }
+
+    public void successMessage(String message) {
+        new SweetAlertDialog(this,
+                SweetAlertDialog.SUCCESS_TYPE).setTitleText("Buen Trabajo!")
+                .setContentText(message).show();
     }
 
 }
