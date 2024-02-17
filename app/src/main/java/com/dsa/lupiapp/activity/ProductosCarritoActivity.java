@@ -69,6 +69,8 @@ public class ProductosCarritoActivity extends AppCompatActivity implements Carri
             this.overridePendingTransition(R.anim.rigth_in, R.anim.rigth_out);
         });
 
+        rcvBolsaCompras = binding.rcvBolsaCompras;
+
         binding.btnFinalizarCompra.setOnClickListener(view -> {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

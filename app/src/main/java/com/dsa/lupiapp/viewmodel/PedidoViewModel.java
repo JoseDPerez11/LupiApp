@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.dsa.lupiapp.entity.GenericResponse;
+import com.dsa.lupiapp.entity.service.Pedido;
 import com.dsa.lupiapp.entity.service.dto.GenerarPedidoDTO;
 import com.dsa.lupiapp.entity.service.dto.PedidoConDetallesDTO;
 import com.dsa.lupiapp.repository.PedidoRepository;
@@ -28,6 +29,10 @@ public class PedidoViewModel extends AndroidViewModel {
 
     public LiveData<GenericResponse<GenerarPedidoDTO>> guardarPedido(GenerarPedidoDTO dto) {
         return repository.guardarPedidoconDetalles(dto);
+    }
+
+    public LiveData<GenericResponse<Pedido>> anularPedido(int idPe) {
+        return repository.anularPedido(idPe);
     }
 
 }

@@ -2,13 +2,14 @@ package com.dsa.lupiapp.adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.activity.ui.compras.DetalleMisComprasActivity;
+import com.dsa.lupiapp.communication.AnularPedidoCommunication;
 import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.databinding.ItemMisComprasBinding;
 import com.dsa.lupiapp.entity.service.dto.PedidoConDetallesDTO;
@@ -18,19 +19,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.sql.Time;
-import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.ViewHolder> {
 
     private final List<PedidoConDetallesDTO> pedidos;
     private final Communication communication;
+    private final AnularPedidoCommunication anularPedidoCommunication;
 
-    public MisComprasAdapter(List<PedidoConDetallesDTO> pedidos, Communication communication) {
+    public MisComprasAdapter(List<PedidoConDetallesDTO> pedidos, Communication communication, AnularPedidoCommunication anularPedidoCommunication) {
         this.pedidos = pedidos;
         this.communication = communication;
+        this.anularPedidoCommunication = anularPedidoCommunication;
     }
 
     @NonNull
@@ -66,6 +70,7 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
         }
 
         public void setItem(final PedidoConDetallesDTO pedidoDetalleDto) {
+
             binding.txtValueCodPurchases.setText("C000" + Integer.toString(pedidoDetalleDto.getPedido().getId()));
             binding.txtValueDatePurchases.setText(pedidoDetalleDto.getPedido().getFechaCompra().toString());
             binding.txtValueAmount.setText(String.format(Locale.ENGLISH, "S/%.2f", pedidoDetalleDto.getPedido().getMonto()));
@@ -81,7 +86,35 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
                 intent.putExtra("detailsPurchases", gson.toJson(pedidoDetalleDto.getDetallePedido()));
                 communication.showDetails(intent);
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    anularPedido(pedidoDetalleDto.getPedido().getId());
+                    return true;
+                }
+            });
         }
+
+        private void anularPedido(int id) {
+            new SweetAlertDialog(itemView.getContext(), SweetAlertDialog.WARNING_TYPE).setTitleText("Aviso del sistema !")
+                    .setContentText("¿Estás seguro de cancelar el pedido solicitado?, Una vez cancelado no podrás deshacer los cambios")
+                    .setCancelText("No, Cancelar!").setConfirmText("Sí, Confirmar")
+                    .showCancelButton(true)
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        new SweetAlertDialog(itemView.getContext(), SweetAlertDialog.SUCCESS_TYPE).setTitleText("Buen Trabajo")
+                                .setContentText(anularPedidoCommunication.anularPedido(id))
+                                .show();
+                    }).setCancelClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        new SweetAlertDialog(itemView.getContext(), SweetAlertDialog.ERROR_TYPE).setTitleText("Operación Cancelada !")
+                                .setContentText("No cancelaste ningún pedido")
+                                .show();
+                    }).show();
+        }
+
+
 
     }
 }

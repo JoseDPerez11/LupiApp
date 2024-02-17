@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.adapter.MisComprasAdapter;
+import com.dsa.lupiapp.communication.AnularPedidoCommunication;
 import com.dsa.lupiapp.communication.Communication;
 import com.dsa.lupiapp.databinding.FragmentMisComprasBinding;
 import com.dsa.lupiapp.entity.service.Usuario;
@@ -30,7 +31,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class MisComprasFragment extends Fragment implements Communication {
+public class MisComprasFragment extends Fragment implements Communication, AnularPedidoCommunication {
 
     private PedidoViewModel pedidoViewModel;
     private RecyclerView rcvPedidos;
@@ -61,7 +62,7 @@ public class MisComprasFragment extends Fragment implements Communication {
     }
 
     private void initAdapter() {
-        misComprasAdapter = new MisComprasAdapter(new ArrayList<>(), this);
+        misComprasAdapter = new MisComprasAdapter(new ArrayList<>(), this, this);
         rcvPedidos.setLayoutManager(new GridLayoutManager(getContext(), 1));
         rcvPedidos.setAdapter(misComprasAdapter);
     }
@@ -74,7 +75,7 @@ public class MisComprasFragment extends Fragment implements Communication {
                 .create();
 
         String usuarioJson = sharedPreferences.getString("UsuarioJson", null);
-        if (usuarioJson == null) {
+        if (usuarioJson != null) {
             final Usuario usuario = gson.fromJson(usuarioJson, Usuario.class);
             this.pedidoViewModel.listarPedidosPorCliente(usuario.getCliente().getId()).observe(getViewLifecycleOwner(), response -> {
                 misComprasAdapter.updateItems(response.getBody());
@@ -86,5 +87,15 @@ public class MisComprasFragment extends Fragment implements Communication {
     public void showDetails(Intent intent) {
         getActivity().startActivity(intent);
         getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
+
+    @Override
+    public String anularPedido(int id) {
+        this.pedidoViewModel.anularPedido(id).observe(getViewLifecycleOwner(), response -> {
+            if (response.getRpta() == 1) {
+                loadData();
+            }
+        });
+        return "El pedido ha sido cancelado";
     }
 }

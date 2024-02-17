@@ -35,6 +35,7 @@ public class DetalleMisComprasActivity extends AppCompatActivity {
         binding = ActivityDetalleMisComprasBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        rcvDetalleMisCompras = binding.rcvDetalleMisCompras;
         init();
         initAdapter();
         loadData();
