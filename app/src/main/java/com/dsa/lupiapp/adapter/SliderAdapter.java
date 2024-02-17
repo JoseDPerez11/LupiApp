@@ -69,9 +69,6 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     }
 
     protected class SliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
-        /*View itemView;
-        ImageView imageView;
-        TextView textView;*/
 
         private ImageSliderLayoutItemBinding binding;
 

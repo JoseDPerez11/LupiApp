@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.ProductosCarritoActivity">
+    android:background="#2e2e2e"
+    tools:context=".activity.ListarProductosPorCategoriaActivity">
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,65 +16,53 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content" >
+            
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/green_500"
                 app:navigationIcon="@drawable/ic_volver_atras"
-                app:title="Bolsa de Compras"
+                app:title="@string/fragment_toolbar_title"
                 app:titleTextColor="@color/white" />
-
+            
         </com.google.android.material.appbar.AppBarLayout>
-
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/san_francisco"
+                android:text="@string/fragment_title"
+                android:textColor="#fff"
+                android:textSize="24sp" />
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/san_francisco"
-                    android:gravity="center"
-                    android:text="Resumen de tu orden"
-                    android:textColor="#2e2e2e"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvBolsaCompras"
+                    android:id="@+id/rcvProductosPorCategoria"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp" />
-
-                <Button
-                    android:id="@+id/btnFinalizarCompra"
-                    android:layout_width="250dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="#2e2e2e"
-                    android:text="Finalizar Compra"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:layout_margin="8dp"/>
 
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

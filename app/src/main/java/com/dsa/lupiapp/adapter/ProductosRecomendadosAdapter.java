@@ -16,6 +16,7 @@ import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.activity.DetalleProductoActivity;
 import com.dsa.lupiapp.api.ConfigApi;
 import com.dsa.lupiapp.communication.Communication;
+import com.dsa.lupiapp.databinding.ItemProductosBinding;
 import com.dsa.lupiapp.entity.service.Producto;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
@@ -41,7 +42,7 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_productos, parent, false);
+        final ItemProductosBinding view = ItemProductosBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(view);
     }
 
@@ -62,14 +63,14 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
+
+        private ItemProductosBinding binding;
+        public ViewHolder(@NonNull ItemProductosBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void setItem(final Producto producto) {
-            ImageView imgProducto = itemView.findViewById(R.id.imgProducto);
-            TextView nameProducto = itemView.findViewById(R.id.nameProducto);
-            Button btnOrdenar = itemView.findViewById(R.id.btnOrdenar);
 
             String url = ConfigApi.baseUrlE + "/api/documento-almacenado/download/" + producto.getFoto().getFileName();
             Picasso picasso = new Picasso.Builder(itemView.getContext())
@@ -77,9 +78,9 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
                     .build();
             picasso.load(url)
                     .error(R.drawable.image_not_found)
-                    .into(imgProducto);
-            nameProducto.setText(producto.getNombre());
-            btnOrdenar.setOnClickListener(v-> {
+                    .into(binding.imgProducto);
+            binding.nameProducto.setText(producto.getNombre());
+            binding.btnOrdenar.setOnClickListener(v-> {
                 Toast.makeText(itemView.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
             });
 
