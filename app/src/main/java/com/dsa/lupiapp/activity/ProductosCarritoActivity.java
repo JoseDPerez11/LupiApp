@@ -2,6 +2,7 @@ package com.dsa.lupiapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,14 +23,17 @@ import com.dsa.lupiapp.communication.CarritoCommunication;
 import com.dsa.lupiapp.databinding.ActivityProductosCarritoBinding;
 import com.dsa.lupiapp.entity.service.DetallePedido;
 import com.dsa.lupiapp.entity.service.Usuario;
+import com.dsa.lupiapp.entity.service.dto.GenerarPedidoDTO;
 import com.dsa.lupiapp.utils.Carrito;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
+import com.dsa.lupiapp.viewmodel.PedidoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductosCarritoActivity extends AppCompatActivity implements CarritoCommunication {
@@ -38,6 +42,8 @@ public class ProductosCarritoActivity extends AppCompatActivity implements Carri
 
     private ProductoCarritoAdapter productoCarritoAdapter;
     private RecyclerView rcvBolsaCompras;
+
+    private PedidoViewModel pedidoViewModel;
 
     final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Date.class, new DateSerializer())
@@ -55,6 +61,7 @@ public class ProductosCarritoActivity extends AppCompatActivity implements Carri
         initAdapter();
     }
 
+
     private void init() {
         binding.toolbar.setNavigationIcon(R.drawable.ic_volver_atras);
         binding.toolbar.setNavigationOnClickListener(view -> {
@@ -70,7 +77,7 @@ public class ProductosCarritoActivity extends AppCompatActivity implements Carri
             int idCliente = usuario.getCliente().getId();
             if (idCliente != 0) {
                 toastCorrecto("Hay un Usuario en sesión, registrando venta...");
-                //registrarPedido(idCliente);
+                registrarPedido(idCliente);
             } else {
                 toastIncorrecto("No ha iniciado sesión, se le redigirá al login");
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -81,13 +88,35 @@ public class ProductosCarritoActivity extends AppCompatActivity implements Carri
     }
 
     private void initViewModel() {
-
+        final ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        this.pedidoViewModel = viewModelProvider.get(PedidoViewModel.class);
     }
 
     private void initAdapter() {
         productoCarritoAdapter = new ProductoCarritoAdapter(Carrito.getDetallesPedidos(), this);
         rcvBolsaCompras.setLayoutManager(new LinearLayoutManager(this));
         rcvBolsaCompras.setAdapter(productoCarritoAdapter);
+    }
+
+    private void registrarPedido(int idCliente) {
+        ArrayList<DetallePedido> detallePedidos = Carrito.getDetallesPedidos();
+        GenerarPedidoDTO dto = new GenerarPedidoDTO();
+        java.util.Date date = new java.util.Date();
+        dto.getPedido().setFechaCompra(new Date(date.getTime()));
+        dto.getPedido().setAnularPedido(false);
+        dto.getPedido().setMonto(getTotalVenta(detallePedidos));
+        dto.getCliente().setId(idCliente);
+        dto.setDetallePedidos(detallePedidos);
+        this.pedidoViewModel.guardarPedido(dto).observe(this, response -> {
+            if (response.getRpta() == 1) {
+                toastCorrecto("Pedido registrado con éxito");
+                Carrito.limpiar();
+                finish();
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            } else {
+                toastIncorrecto("Demonios!, No se pudo registrar pedido");
+            }
+        });
     }
 
     private double getTotalVenta(List<DetallePedido> detalles) {
