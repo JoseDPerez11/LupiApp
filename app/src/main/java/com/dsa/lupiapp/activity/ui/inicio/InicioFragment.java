@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.activity.ui.inicio;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,11 +21,16 @@ import com.dsa.lupiapp.adapter.CategoriaAdapter;
 import com.dsa.lupiapp.adapter.ProductosRecomendadosAdapter;
 import com.dsa.lupiapp.adapter.SliderAdapter;
 import com.dsa.lupiapp.communication.Communication;
+import com.dsa.lupiapp.communication.MostrarBagdeCommunication;
 import com.dsa.lupiapp.databinding.FragmentInicioBinding;
+import com.dsa.lupiapp.entity.service.DetallePedido;
 import com.dsa.lupiapp.entity.service.Producto;
 import com.dsa.lupiapp.entity.service.SliderItem;
+import com.dsa.lupiapp.utils.Carrito;
 import com.dsa.lupiapp.viewmodel.CategoriaViewModel;
 import com.dsa.lupiapp.viewmodel.ProductoViewModel;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -32,7 +38,9 @@ import com.smarteist.autoimageslider.SliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InicioFragment extends Fragment implements Communication {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class InicioFragment extends Fragment implements Communication, MostrarBagdeCommunication {
 
     private CategoriaViewModel categoriaViewModel;
     private CategoriaAdapter categoriaAdapter;
@@ -105,7 +113,7 @@ public class InicioFragment extends Fragment implements Communication {
         categoriaAdapter = new CategoriaAdapter(getContext(), R.layout.item_categories, new ArrayList<>());
         gvCategorias.setAdapter(categoriaAdapter);
 
-        productoAdapter = new ProductosRecomendadosAdapter(productos, this);
+        productoAdapter = new ProductosRecomendadosAdapter(productos, this, this);
         rcvProductosRecomendados.setAdapter(productoAdapter);
     }
 
@@ -140,5 +148,20 @@ public class InicioFragment extends Fragment implements Communication {
     public void showDetails(Intent intent) {
         getActivity().startActivity(intent);
         getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    @Override
+    public void add(DetallePedido detallePedido) {
+        succesMessage(Carrito.agregarProductos(detallePedido));
+        BadgeDrawable badgeDrawable = BadgeDrawable.create(this.getContext());
+        badgeDrawable.setNumber(Carrito.getDetallesPedidos().size());
+        BadgeUtils.attachBadgeDrawable(badgeDrawable, getActivity().findViewById(R.id.toolbar), R.id.bolsaCompras);
+    }
+
+    private void succesMessage(String message) {
+        new SweetAlertDialog(this.getContext(),
+                SweetAlertDialog.SUCCESS_TYPE).setTitleText("Buen trabajo!")
+                .setContentText(message).show();
     }
 }

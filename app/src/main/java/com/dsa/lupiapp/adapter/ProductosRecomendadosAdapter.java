@@ -2,11 +2,7 @@ package com.dsa.lupiapp.adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +12,9 @@ import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.activity.DetalleProductoActivity;
 import com.dsa.lupiapp.api.ConfigApi;
 import com.dsa.lupiapp.communication.Communication;
+import com.dsa.lupiapp.communication.MostrarBagdeCommunication;
 import com.dsa.lupiapp.databinding.ItemProductosBinding;
+import com.dsa.lupiapp.entity.service.DetallePedido;
 import com.dsa.lupiapp.entity.service.Producto;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
@@ -33,10 +31,12 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
 
     private List<Producto> productos;
     private final Communication communication;
+    private final MostrarBagdeCommunication bagdeCommunication;
 
-    public ProductosRecomendadosAdapter(List<Producto> productos, Communication communication) {
+    public ProductosRecomendadosAdapter(List<Producto> productos, Communication communication, MostrarBagdeCommunication bagdeCommunication) {
         this.productos = productos;
         this.communication = communication;
+        this.bagdeCommunication = bagdeCommunication;
     }
 
     @NonNull
@@ -56,9 +56,9 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
         return this.productos.size();
     }
 
-    public void updateItems(List<Producto> productos) {
+    public void updateItems(List<Producto> producto) {
         this.productos.clear();
-        this.productos.addAll(productos);
+        this.productos.addAll(producto);
         this.notifyDataSetChanged();
     }
 
@@ -81,7 +81,11 @@ public class ProductosRecomendadosAdapter extends RecyclerView.Adapter<Productos
                     .into(binding.imgProducto);
             binding.nameProducto.setText(producto.getNombre());
             binding.btnOrdenar.setOnClickListener(v-> {
-                Toast.makeText(itemView.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
+                DetallePedido detallePedido = new DetallePedido();
+                detallePedido.setProducto(producto);
+                detallePedido.setCantidad(1);
+                detallePedido.setPrecio(producto.getPrecio());
+                bagdeCommunication.add(detallePedido);
             });
 
             itemView.setOnClickListener(v -> {

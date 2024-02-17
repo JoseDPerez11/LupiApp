@@ -1,5 +1,6 @@
 package com.dsa.lupiapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,8 +13,11 @@ import android.widget.TextView;
 import com.dsa.lupiapp.R;
 import com.dsa.lupiapp.api.ConfigApi;
 import com.dsa.lupiapp.entity.service.Usuario;
+import com.dsa.lupiapp.utils.Carrito;
 import com.dsa.lupiapp.utils.DateSerializer;
 import com.dsa.lupiapp.utils.TimeSerializer;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -110,6 +114,7 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     // Método para cargar datos del usuario desde SharedPreferences y mostrarlos en la vista
+    @SuppressLint("UnsafeOptInUsageError")
     private void loadData() {
 
         // Obtener las preferencias compartidas
@@ -153,6 +158,10 @@ public class InicioActivity extends AppCompatActivity {
                     .error(R.drawable.image_not_found)
                     .into(imgFoto);
         }
+
+        BadgeDrawable badgeDrawable = BadgeDrawable.create(this);
+        badgeDrawable.setNumber(Carrito.getDetallesPedidos().size());
+        BadgeUtils.attachBadgeDrawable(badgeDrawable, findViewById(R.id.toolbar), R.id.bolsaCompras);
     }
 
     // Método para cerrar sesión del usuario
