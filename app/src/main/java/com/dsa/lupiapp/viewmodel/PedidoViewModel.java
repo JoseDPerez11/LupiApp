@@ -28,7 +28,7 @@ public class PedidoViewModel extends AndroidViewModel {
     }
 
     public LiveData<GenericResponse<GenerarPedidoDTO>> guardarPedido(GenerarPedidoDTO dto) {
-        return repository.guardarPedidoconDetalles(dto);
+        return this.repository.guardarPedidoconDetalles(dto);
     }
 
     public LiveData<GenericResponse<Pedido>> anularPedido(int idPe) {

@@ -58,7 +58,6 @@ public class MisComprasFragment extends Fragment implements Communication, Anula
 
     private void initViewModel() {
         pedidoViewModel = new ViewModelProvider(this).get(PedidoViewModel.class);
-
     }
 
     private void initAdapter() {
@@ -86,7 +85,7 @@ public class MisComprasFragment extends Fragment implements Communication, Anula
     @Override
     public void showDetails(Intent intent) {
         getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        getActivity().overridePendingTransition(R.anim.above_in, R.anim.above_out);
     }
 
     @Override

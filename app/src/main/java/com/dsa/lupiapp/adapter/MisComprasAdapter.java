@@ -57,7 +57,7 @@ public class MisComprasAdapter extends RecyclerView.Adapter<MisComprasAdapter.Vi
     public void updateItems(List<PedidoConDetallesDTO> pedido) {
         this.pedidos.clear();
         this.pedidos.addAll(pedido);
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
